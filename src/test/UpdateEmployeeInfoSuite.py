@@ -5,9 +5,9 @@ from TestUtils import TestUpdateEmployeeInfo
 class UpdateEmployeeInfoSuite(unittest.TestCase):
     def test_1(self):
         """Update name"""
-        name = ""
+        name = "Cao Trung"
         gender = ""
-        birth = "empty"
+        birth = ""
         address = ""
         expect = "Update successfully"
         self.assertTrue(TestUpdateEmployeeInfo.test(name, gender, birth, address, expect, 201))

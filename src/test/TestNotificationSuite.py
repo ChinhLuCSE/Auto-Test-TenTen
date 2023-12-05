@@ -26,9 +26,11 @@ class TestDefaultSuite():
     self.driver.find_element(By.XPATH, "//label/input").click()
     self.driver.find_element(By.XPATH, "//div[2]/label/input").click()
     self.driver.find_element(By.XPATH, "//button[contains(.,\'Login\')]").click()
+	time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".mt-3").click()
+	time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, "path").click()
-    self.driver.find_element(By.CSS_SELECTOR, ".mt-3").click()
+	time.sleep(5)
     assert self.driver.find_element(By.CSS_SELECTOR, ".-top-2").text == "0"
   
   def test_test21(self):
@@ -39,30 +41,53 @@ class TestDefaultSuite():
     self.driver.find_element(By.XPATH, "//label/input").click()
     self.driver.find_element(By.XPATH, "//div[2]/label/input").click()
     self.driver.find_element(By.XPATH, "//button[contains(.,\'Login\')]").click()
+	time.sleep(5)
+
     self.driver.find_element(By.CSS_SELECTOR, ".mt-3").click()
+	time.sleep(5)
+
     self.driver.find_element(By.CSS_SELECTOR, "path").click()
+	time.sleep(5)
+
     assert self.driver.find_element(By.CSS_SELECTOR, ".-top-2").text == "0"
     self.driver.find_element(By.LINK_TEXT, "Log Out").click()
+	time.sleep(5)
+
     self.driver.find_element(By.ID, "phoneNumber").send_keys("02608555691")
     self.driver.find_element(By.ID, "password").send_keys("123456")
     self.driver.find_element(By.XPATH, "//label/input").click()
     self.driver.find_element(By.XPATH, "//div[2]/label/input").click()
     self.driver.find_element(By.XPATH, "//button[contains(.,\'Login\')]").click()
+	time.sleep(5)
+
     self.driver.find_element(By.LINK_TEXT, "Leave Registration").click()
     self.driver.find_element(By.XPATH, "//span[contains(.,\'+ Add leave\')]").click()
+	time.sleep(5)
+
     self.driver.find_element(By.XPATH, "//div[2]/div[2]/div").click()
     self.driver.find_element(By.XPATH, "//tr[2]/td[4]/div").click()
     self.driver.find_element(By.XPATH, "//div[3]/div[2]/div").click()
     self.driver.find_element(By.XPATH, "//div[3]/div[2]/div/input").send_keys("2023-12-07")
     self.driver.find_element(By.XPATH, "//input[@type=\'text\']").send_keys("Nghỉ ốm - Sang automation test")
+	time.sleep(5)
+
     self.driver.find_element(By.XPATH, "//span[contains(.,\'Submit\')]").click()
+	time.sleep(5)
+
     self.driver.find_element(By.LINK_TEXT, "Log Out").click()
     self.driver.find_element(By.ID, "phoneNumber").send_keys("0901235456")
     self.driver.find_element(By.ID, "password").send_keys("123456")
     self.driver.find_element(By.XPATH, "//label/input").click()
     self.driver.find_element(By.XPATH, "//div[2]/label/input").click()
     self.driver.find_element(By.XPATH, "//button[contains(.,\'Login\')]").click()
+
+	time.sleep(5)
+
     self.driver.find_element(By.CSS_SELECTOR, ".mt-3").click()
+	time.sleep(5)
+
     assert self.driver.find_element(By.CSS_SELECTOR, ".-top-2").text == "1"
+	time.sleep(5)
+
     self.driver.find_element(By.CSS_SELECTOR, "path").click()
   

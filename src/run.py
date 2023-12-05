@@ -14,6 +14,9 @@ def main(argv):
         elif argv[1] == "CreateLeaveRequestSuite":
             from CreateLeaveRequestSuite import CreateLeaveRequestSuite
             getAndTest(CreateLeaveRequestSuite)
+        elif argv[1] == "UpdateEmployeeInfoSuite":
+            from UpdateEmployeeInfoSuite import UpdateEmployeeInfoSuite
+            getAndTest(UpdateEmployeeInfoSuite)
         else:
             printUsage()
     else:
@@ -41,7 +44,7 @@ def test(suite):
 
 def printUsage():
     print("python3 run.py test CreateLeaveRequestSuite")
-
+    print("python3 run.py test UpdateEmployeeInfoSuite")
 
 if __name__ == "__main__":
     main(sys.argv[1:])

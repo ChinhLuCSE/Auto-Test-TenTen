@@ -1,6 +1,6 @@
 import unittest
 from selenium.common.exceptions import NoSuchElementException
-from TestUtils import TestStatistic
+from TestUtils_ThinhTo import TestStatistic
 import time
 
 

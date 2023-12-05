@@ -41,17 +41,22 @@ def signIn(username, password):
 
 	# make sure logged in
 	welcome_h1 = driver.find_element(By.XPATH, '/html/body/div/div[1]/div/div[1]/h1')
+	time.sleep(5)
 
 
 # logout
 def logOut():
+	time.sleep(5)
 	logout_btn = driver.find_element(By.XPATH, '//aside[@id="default-sidebar"]/div/div/a[@href="/sign-in"]')
 	logout_btn.click()
+	time.sleep(5)
 
 
 # navigate to statistic and return pipeline ([], [])
 def getStatistic(status_month="1", dayoff_month="1"):
+	time.sleep(5)
 	driver.get(base_url + "manage/statistic")
+	time.sleep(5)
 
 	# status section
 	# time.sleep(3)
@@ -61,6 +66,7 @@ def getStatistic(status_month="1", dayoff_month="1"):
 	drop_status = Select(select_status)
 	drop_status.select_by_value(status_month)
 
+	time.sleep(5)
 	select_dayoff = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[2]/div/section[1]/select')
 	drop_dayoff = Select(select_dayoff)
 	drop_dayoff.select_by_value(dayoff_month)
@@ -87,7 +93,7 @@ def getStatistic(status_month="1", dayoff_month="1"):
 	dayoff_count = driver.find_elements(By.XPATH, '/html/body/div[2]/div[2]/div[2]/div/section[2]/div/div[1]')
 	dayoff_name = driver.find_elements(By.XPATH, '/html/body/div[2]/div[2]/div[2]/div/section[2]/div/div[3]')
 	dayoff_dict = {
-		name.text: count.text for (name, count) in zip(dayoff_name, dayoff_count)
+		name.text: int(count.text) for (name, count) in zip(dayoff_name, dayoff_count)
 	}
 
 	# combine 2 sections
@@ -115,8 +121,9 @@ def addLeave(begin="2023-12-01", end="2023-12-04"):
 	reason_field = driver.find_element(By.XPATH, '//input[@type="text"]')
 	reason_field.send_keys("auto reason - Thinh To testcase")
 
-	submit_btn = driver.find_element(By.XPATH, '//span[contains(.,"Submit")]')
+	submit_btn = driver.find_element(By.XPATH, '/html/body/div[2]/div/div[2]/div/div[2]/div/form/div[5]/button')
 	submit_btn.click()
+	time.sleep(10)
 
 
 def getInfo():
@@ -129,24 +136,68 @@ def getInfo():
 	return employee_name.text + ' ' + employee_id.text.replace('ID', 'id', 1)
 
 
+def approvedRequest(approved=1):
+	time.sleep(5)
+	driver.get(base_url + 'manage/leave')
+	time.sleep(5)
+
+	pagination_btns = driver.find_elements(By.XPATH, '/html/body/div/div[2]/div[2]/div[1]/div/div/div/ul/li/a')[::-1]
+	for pagination_btn in pagination_btns:
+		try:
+			pagination_btn.click()
+			time.sleep(5)
+			approve_btns = driver.find_elements(By.XPATH, '/html/body/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr/td[8]/div/div[1]/button')
+			if not approve_btns:
+				continue
+			reject_btns = driver.find_elements(By.XPATH, '/html/body/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr/td[8]/div/div[2]/button')
+			last_approve_btn = approve_btns[-1]
+			last_reject_btn = reject_btns[-1]
+
+			if approved == 1:
+				time.sleep(5)
+				last_approve_btn.click()
+				time.sleep(5)
+				driver.find_element(By.XPATH, '/html/body/div[2]/div/div[2]/div/div[2]/div/div/div/button[2]').click()
+				time.sleep(5)
+				break
+			elif approved == 2:
+				time.sleep(5)
+				last_reject_btn.click()
+				time.sleep(5)
+				driver.find_element(By.XPATH, '/html/body/div[2]/div/div[2]/div/div[2]/div/div/div/button[2]').click()
+				time.sleep(5)
+				break
+
+		except NoSuchElementException:
+			pass
+
+
+
+
 class TestStatistic:
 	@staticmethod
 	def mainFlow(approved=0, status_month="1", dayoff_month="1", start_date="2023-12-01", end_date="2023-12-01",
-			  expected_status=1, expected_dayoff=0):
+				expected_status=1, expected_dayoff=0, statistic_only=False):
 		# Get the old data in admin
 		signIn("0901235456", "123456")
+		# getInfo()
 		old_statistic = getStatistic(status_month, dayoff_month)
+		if statistic_only:
+			time.sleep(15)
+			return True, True
+		# logOut()
 
 		# Generate new Data
 		signIn("026503754569", "123456")
 		info = getInfo()
-		addLeave(start_date, end_date)
+		# addLeave(start_date, end_date)
 		# logOut()
 
 		# Check new Data
-		signIn("0901235456", "123456")
-
-		# approvedRequest()
+		signIn("023674880804", "123456")
+		getInfo()
+		if approved == 1 or approved == 2:
+			approvedRequest(approved)
 		new_statistic = getStatistic(status_month, dayoff_month)
 
 		# assert status
@@ -160,7 +211,11 @@ class TestStatistic:
 			return
 
 		assert_status = old_statistic["status"][update_status] + expected_status == new_statistic["status"][update_status]
+		print(old_statistic)
+		print(new_statistic)
 
 		# assert dayoff
-		# logOut()
-		return assert_status, True
+		assert_dayoff = old_statistic["dayoff"][info] + expected_dayoff == new_statistic["dayoff"][info]
+		driver.delete_all_cookies()
+		driver.close()
+		return assert_status, assert_dayoff

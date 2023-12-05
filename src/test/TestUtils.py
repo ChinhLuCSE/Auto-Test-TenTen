@@ -24,9 +24,8 @@ LOUGOUT_BUTTON_XPATH = (
 CHANGE_PASSWORD_LINK_XPATH = "//a[@href='https://account.hcmut.edu.vn/']"
 CHANGE_PASSWORD_SUBMIT_XPATH = "//button[@type='submit']"
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 # driver.maximize_window()
-driver.set_window_size(1600, 1030)
 
 def goToLoginPage():
     driver.get(url)

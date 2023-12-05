@@ -22,6 +22,7 @@ driver.implicitly_wait(30)
 
 
 def signIn(username, password):
+	time.sleep(20)
 	driver.get(base_url + "sign-in")
 
 	# find and fill info
@@ -41,17 +42,22 @@ def signIn(username, password):
 
 	# make sure logged in
 	welcome_h1 = driver.find_element(By.XPATH, '/html/body/div/div[1]/div/div[1]/h1')
+	time.sleep(20)
 
 
 # logout
 def logOut():
+	time.sleep(20)
 	logout_btn = driver.find_element(By.XPATH, '//aside[@id="default-sidebar"]/div/div/a[@href="/sign-in"]')
 	logout_btn.click()
+	time.sleep(20)
 
 
 # navigate to statistic and return pipeline ([], [])
 def getStatistic(status_month="1", dayoff_month="1"):
+	time.sleep(20)
 	driver.get(base_url + "manage/statistic")
+	time.sleep(20)
 
 	# status section
 	# time.sleep(3)
@@ -61,6 +67,7 @@ def getStatistic(status_month="1", dayoff_month="1"):
 	drop_status = Select(select_status)
 	drop_status.select_by_value(status_month)
 
+	time.sleep(20)
 	select_dayoff = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[2]/div/section[1]/select')
 	drop_dayoff = Select(select_dayoff)
 	drop_dayoff.select_by_value(dayoff_month)
@@ -128,16 +135,19 @@ def getInfo():
 								   "body > div > div.flex.flex-col.items-center.justify-center > div.flex.w-full.flex-col.items-center.p-2.mt-14 > span.font-bold")
 	employee_id = driver.find_element(By.CSS_SELECTOR, "body > div > div.flex.flex-col.items-center.justify-center > div.flex.w-full.flex-col.items-center.p-2.mt-14 > span:nth-child(4)")
 	return employee_name.text + ' ' + employee_id.text.replace('ID', 'id', 1)
+	time.sleep(20)
 
 
 def approvedRequest(approved=1):
+	time.sleep(20)
 	driver.get(base_url + 'manage/leave')
-	time.sleep(5)
+	time.sleep(20)
 
 	pagination_btns = driver.find_elements(By.XPATH, '/html/body/div/div[2]/div[2]/div[1]/div/div/div/ul/li/a')[::-1]
 	for pagination_btn in pagination_btns:
 		try:
 			pagination_btn.click()
+			time.sleep(20)
 			approve_btns = driver.find_elements(By.XPATH, '/html/body/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr/td[8]/div/div[1]/button')
 			if not approve_btns:
 				continue
@@ -146,18 +156,18 @@ def approvedRequest(approved=1):
 			last_reject_btn = reject_btns[-1]
 
 			if approved == 1:
-				time.sleep(1)
+				time.sleep(20)
 				last_approve_btn.click()
-				time.sleep(1)
+				time.sleep(20)
 				driver.find_element(By.XPATH, '/html/body/div[2]/div/div[2]/div/div[2]/div/div/div/button[2]').click()
-				time.sleep(1)
+				time.sleep(20)
 				break
 			elif approved == 2:
-				time.sleep(1)
+				time.sleep(20)
 				last_reject_btn.click()
-				time.sleep(1)
+				time.sleep(20)
 				driver.find_element(By.XPATH, '/html/body/div[2]/div/div[2]/div/div[2]/div/div/div/button[2]').click()
-				time.sleep(1)
+				time.sleep(20)
 				break
 
 		except NoSuchElementException:
@@ -174,13 +184,13 @@ class TestStatistic:
 		signIn("0901235456", "123456")
 		getInfo()
 		old_statistic = getStatistic(status_month, dayoff_month)
-		logOut()
+		# logOut()
 
 		# Generate new Data
 		signIn("026503754569", "123456")
 		info = getInfo()
-		addLeave(start_date, end_date)
-		logOut()
+		# addLeave(start_date, end_date)
+		# logOut()
 
 		# Check new Data
 		signIn("023674880804", "123456")

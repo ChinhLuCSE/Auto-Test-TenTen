@@ -140,7 +140,6 @@ class TestStatistic:
 		# Generate new Data
 		signIn("026503754569", "123456")
 		info = getInfo()
-		print(info)
 		addLeave(start_date, end_date)
 		# logOut()
 
